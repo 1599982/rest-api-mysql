@@ -9,5 +9,7 @@ public class PersonResponse {
     private String dni;
     private String nombre;
     private boolean newRegistration;
+    private boolean hasVotedPresident;
+    private boolean hasVotedMayor;
     private String message;
 }

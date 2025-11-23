@@ -28,6 +28,8 @@ public class PersonController {
             person.getDni(),
             nombre,
             !existedBefore,
+            person.getVotePresident() != null,
+            person.getVoteMayor() != null,
             existedBefore ? "Person already registered" : "Person registered successfully"
         );
         
