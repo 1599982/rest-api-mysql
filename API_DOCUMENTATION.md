@@ -7,6 +7,7 @@ Base URL: `http://localhost:8080`
 - [Candidate Endpoints](#candidate-endpoints)
 - [Comment Endpoints](#comment-endpoints)
 - [Vote Endpoint](#vote-endpoint)
+- [Statistics Endpoint](#statistics-endpoint)
 
 ---
 
@@ -385,6 +386,56 @@ Retorna todos los comentarios realizados por una persona específica.
   }
 ]
 ```
+
+---
+
+## Statistics Endpoint
+
+### Obtener Estadísticas Generales
+
+Retorna estadísticas generales del sistema de votación incluyendo el total de votos, número de candidatos y los candidatos con mayor votación.
+
+**Endpoint:** `GET /api/statistics`
+
+**Response (200 OK):**
+```json
+{
+  "totalVotes": 150,
+  "totalCandidates": 8,
+  "topPresident": {
+    "nombre": "PEREZ GARCIA JUAN CARLOS",
+    "politicalParty": "Partido Democrático",
+    "votes": 45
+  },
+  "topMayor": {
+    "nombre": "LOPEZ MARTINEZ MARIA ELENA",
+    "politicalParty": "Partido Popular",
+    "votes": 38
+  }
+}
+```
+
+**Response cuando no hay candidatos:**
+```json
+{
+  "totalVotes": 0,
+  "totalCandidates": 0,
+  "topPresident": null,
+  "topMayor": null
+}
+```
+
+**Campos de la respuesta:**
+- `totalVotes`: Suma total de votos de todos los candidatos (presidentes y alcaldes)
+- `totalCandidates`: Número total de candidatos registrados en el sistema
+- `topPresident`: Información del presidente con mayor número de votos (null si no hay presidentes)
+  - `nombre`: Nombre completo obtenido de Migo API
+  - `politicalParty`: Partido político del candidato
+  - `votes`: Número de votos recibidos
+- `topMayor`: Información del alcalde con mayor número de votos (null si no hay alcaldes)
+  - `nombre`: Nombre completo obtenido de Migo API
+  - `politicalParty`: Partido político del candidato
+  - `votes`: Número de votos recibidos
 
 ---
 
