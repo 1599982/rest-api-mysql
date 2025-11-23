@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PersonResponse {
+public class MigoApiRequest {
+    private String token;
     private String dni;
-    private String nombre;
-    private boolean newRegistration;
-    private String message;
 }

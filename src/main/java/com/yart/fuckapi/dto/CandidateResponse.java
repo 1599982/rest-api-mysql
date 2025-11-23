@@ -8,6 +8,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CandidateResponse {
     private String dni;
+    private String nombre;
     private String politicalParty;
     private String description;
     private String imageUri;

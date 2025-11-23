@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class CommentResponse {
     private Long id;
     private String dni;
+    private String nombre;
     private LocalDateTime datetime;
     private String description;
     private String message;
