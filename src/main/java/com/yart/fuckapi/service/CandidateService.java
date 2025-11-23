@@ -45,7 +45,7 @@ public class CandidateService {
     
     @Transactional
     public Candidate updateCandidate(String dni, String politicalParty,
-                                    String description, String imageUri, Office roleType, Integer votes) {
+                                    String description, String imageUri, Office roleType) {
         Candidate candidate = candidateRepository.findById(dni)
             .orElseThrow(() -> new IllegalArgumentException("Candidate with DNI " + dni + " not found"));
         
@@ -53,8 +53,33 @@ public class CandidateService {
         if (description != null) candidate.setDescription(description);
         if (imageUri != null) candidate.setImageUri(imageUri);
         if (roleType != null) candidate.setRoleType(roleType);
-        if (votes != null) candidate.setVotes(votes);
         
+        return candidateRepository.save(candidate);
+    }
+    
+    @Transactional
+    public Candidate vote(String voterDni, String candidateDni) {
+        Person voter = personRepository.findById(voterDni)
+            .orElseThrow(() -> new IllegalArgumentException("Person with DNI " + voterDni + " not found"));
+        
+        Candidate candidate = candidateRepository.findById(candidateDni)
+            .orElseThrow(() -> new IllegalArgumentException("Candidate with DNI " + candidateDni + " not found"));
+        
+        if (candidate.getRoleType() == Office.PRESIDENT) {
+            if (voter.getVotePresident() != null) {
+                throw new IllegalArgumentException("Person has already voted for president");
+            }
+            voter.setVotePresident(candidateDni);
+        } else if (candidate.getRoleType() == Office.MAYOR) {
+            if (voter.getVoteMayor() != null) {
+                throw new IllegalArgumentException("Person has already voted for mayor");
+            }
+            voter.setVoteMayor(candidateDni);
+        }
+        
+        candidate.setVotes(candidate.getVotes() + 1);
+        
+        personRepository.save(voter);
         return candidateRepository.save(candidate);
     }
     

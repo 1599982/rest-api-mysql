@@ -3,6 +3,7 @@ package com.yart.fuckapi.controller;
 import com.yart.fuckapi.dto.CandidateRequest;
 import com.yart.fuckapi.dto.CandidateResponse;
 import com.yart.fuckapi.dto.CandidateUpdateRequest;
+import com.yart.fuckapi.dto.VoteRequest;
 import com.yart.fuckapi.model.Candidate;
 import com.yart.fuckapi.model.Office;
 import com.yart.fuckapi.service.CandidateService;
@@ -59,8 +60,7 @@ public class CandidateController {
                 request.getPoliticalParty(),
                 request.getDescription(),
                 request.getImageUri(),
-                request.getRoleType(),
-                request.getVotes()
+                request.getRoleType()
             );
             
             CandidateResponse response = new CandidateResponse(
@@ -76,6 +76,28 @@ public class CandidateController {
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+    
+    @PostMapping("/vote")
+    public ResponseEntity<?> vote(@RequestBody VoteRequest request) {
+        try {
+            Candidate candidate = candidateService.vote(request.getVoterDni(), request.getCandidateDni());
+            
+            CandidateResponse response = new CandidateResponse(
+                candidate.getDni(),
+                candidate.getPoliticalParty(),
+                candidate.getDescription(),
+                candidate.getImageUri(),
+                candidate.getRoleType(),
+                candidate.getVotes(),
+                "Vote registered successfully"
+            );
+            
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
         }
     }
