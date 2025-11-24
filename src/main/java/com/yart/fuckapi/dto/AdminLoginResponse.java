@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class PersonResponse {
+public class AdminLoginResponse {
+    private boolean authenticated;
     private String dni;
     private String nombre;
-    private boolean newRegistration;
-    private String votedPresidentDni;
-    private String votedMayorDni;
+    private String email;
     private String message;
 }

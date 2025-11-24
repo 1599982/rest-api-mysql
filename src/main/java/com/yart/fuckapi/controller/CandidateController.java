@@ -45,6 +45,7 @@ public class CandidateController {
                 candidate.getImageUri(),
                 candidate.getRoleType(),
                 candidate.getVotes(),
+                candidate.getEnabled(),
                 "Candidate created successfully"
             );
             
@@ -64,7 +65,8 @@ public class CandidateController {
                 request.getPoliticalParty(),
                 request.getDescription(),
                 request.getImageUri(),
-                request.getRoleType()
+                request.getRoleType(),
+                request.getEnabled()
             );
             String nombre = migoApiService.getNameByDni(candidate.getDni());
             
@@ -76,6 +78,7 @@ public class CandidateController {
                 candidate.getImageUri(),
                 candidate.getRoleType(),
                 candidate.getVotes(),
+                candidate.getEnabled(),
                 "Candidate updated successfully"
             );
             
@@ -100,6 +103,7 @@ public class CandidateController {
                 candidate.getImageUri(),
                 candidate.getRoleType(),
                 candidate.getVotes(),
+                candidate.getEnabled(),
                 "Vote registered successfully"
             );
             
@@ -124,6 +128,7 @@ public class CandidateController {
                     c.getImageUri(),
                     c.getRoleType(),
                     c.getVotes(),
+                    c.getEnabled(),
                     null
                 );
             })
@@ -146,6 +151,7 @@ public class CandidateController {
                     c.getImageUri(),
                     c.getRoleType(),
                     c.getVotes(),
+                    c.getEnabled(),
                     null
                 );
             })
@@ -167,6 +173,7 @@ public class CandidateController {
                 candidate.getImageUri(),
                 candidate.getRoleType(),
                 candidate.getVotes(),
+                candidate.getEnabled(),
                 null
             );
             return ResponseEntity.ok(response);

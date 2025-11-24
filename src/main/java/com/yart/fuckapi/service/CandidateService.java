@@ -39,13 +39,14 @@ public class CandidateService {
         candidate.setImageUri(imageUri);
         candidate.setRoleType(roleType);
         candidate.setVotes(0);
+        candidate.setEnabled(true);
         
         return candidateRepository.save(candidate);
     }
     
     @Transactional
     public Candidate updateCandidate(String dni, String politicalParty,
-                                    String description, String imageUri, Office roleType) {
+                                    String description, String imageUri, Office roleType, Boolean enabled) {
         Candidate candidate = candidateRepository.findById(dni)
             .orElseThrow(() -> new IllegalArgumentException("Candidate with DNI " + dni + " not found"));
         
@@ -53,6 +54,7 @@ public class CandidateService {
         if (description != null) candidate.setDescription(description);
         if (imageUri != null) candidate.setImageUri(imageUri);
         if (roleType != null) candidate.setRoleType(roleType);
+        if (enabled != null) candidate.setEnabled(enabled);
         
         return candidateRepository.save(candidate);
     }

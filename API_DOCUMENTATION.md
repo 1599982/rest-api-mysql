@@ -8,6 +8,7 @@ Base URL: `http://localhost:8080`
 - [Comment Endpoints](#comment-endpoints)
 - [Vote Endpoint](#vote-endpoint)
 - [Statistics Endpoint](#statistics-endpoint)
+- [Admin Endpoints](#admin-endpoints)
 
 ---
 
@@ -32,8 +33,8 @@ Registra una nueva persona en el sistema o retorna la existente si ya está regi
   "dni": "43451826",
   "nombre": "CASTILLO GOMES VANESSA SILVIA",
   "newRegistration": true,
-  "hasVotedPresident": false,
-  "hasVotedMayor": false,
+  "votedPresidentDni": null,
+  "votedMayorDni": null,
   "message": "Person registered successfully"
 }
 ```
@@ -44,11 +45,15 @@ Registra una nueva persona en el sistema o retorna la existente si ya está regi
   "dni": "43451826",
   "nombre": "CASTILLO GOMES VANESSA SILVIA",
   "newRegistration": false,
-  "hasVotedPresident": true,
-  "hasVotedMayor": false,
+  "votedPresidentDni": "87654321",
+  "votedMayorDni": null,
   "message": "Person already registered"
 }
 ```
+
+**Campos de la respuesta:**
+- `votedPresidentDni`: DNI del candidato a presidente por el que votó (null si no ha votado)
+- `votedMayorDni`: DNI del candidato a alcalde por el que votó (null si no ha votado)
 
 ---
 
@@ -85,6 +90,7 @@ Crea un nuevo candidato en el sistema. Si el DNI no existe en la tabla Person, s
   "imageUri": "https://example.com/image.jpg",
   "roleType": "PRESIDENT",
   "votes": 0,
+  "enabled": true,
   "message": "Candidate created successfully"
 }
 ```
@@ -110,7 +116,8 @@ Actualiza la información de un candidato existente (excepto el DNI y los votos)
   "politicalParty": "Nuevo Partido",
   "description": "Nueva descripción actualizada",
   "imageUri": "https://example.com/new-image.jpg",
-  "roleType": "MAYOR"
+  "roleType": "MAYOR",
+  "enabled": false
 }
 ```
 
@@ -124,9 +131,12 @@ Actualiza la información de un candidato existente (excepto el DNI y los votos)
   "imageUri": "https://example.com/new-image.jpg",
   "roleType": "MAYOR",
   "votes": 0,
+  "enabled": false,
   "message": "Candidate updated successfully"
 }
 ```
+
+**Nota:** El campo `enabled` permite habilitar (`true`) o deshabilitar (`false`) un candidato. Los candidatos deshabilitados permanecen en el sistema pero pueden ser filtrados en el frontend.
 
 **Response Error (404 Not Found):**
 ```json
@@ -154,6 +164,7 @@ Retorna la lista completa de candidatos registrados.
     "imageUri": "https://example.com/image1.jpg",
     "roleType": "PRESIDENT",
     "votes": 5,
+    "enabled": true,
     "message": null
   },
   {
@@ -164,6 +175,7 @@ Retorna la lista completa de candidatos registrados.
     "imageUri": "https://example.com/image2.jpg",
     "roleType": "MAYOR",
     "votes": 3,
+    "enabled": false,
     "message": null
   }
 ]
@@ -190,6 +202,7 @@ Retorna los candidatos filtrados por tipo de cargo (PRESIDENT o MAYOR).
     "imageUri": "https://example.com/image1.jpg",
     "roleType": "PRESIDENT",
     "votes": 5,
+    "enabled": true,
     "message": null
   }
 ]
@@ -215,6 +228,7 @@ Retorna la información de un candidato específico.
   "imageUri": "https://example.com/image.jpg",
   "roleType": "PRESIDENT",
   "votes": 5,
+  "enabled": true,
   "message": null
 }
 ```
@@ -254,6 +268,7 @@ Registra el voto de una persona para un candidato. Una persona solo puede votar 
   "imageUri": "https://example.com/image.jpg",
   "roleType": "PRESIDENT",
   "votes": 6,
+  "enabled": true,
   "message": "Vote registered successfully"
 }
 ```
@@ -436,6 +451,57 @@ Retorna estadísticas generales del sistema de votación incluyendo el total de 
   - `nombre`: Nombre completo obtenido de Migo API
   - `politicalParty`: Partido político del candidato
   - `votes`: Número de votos recibidos
+
+---
+
+## Admin Endpoints
+
+### Verificar Admin
+
+Verifica la existencia y credenciales de un administrador en el sistema.
+
+**Endpoint:** `POST /api/admin/verify`
+
+**Request Body:**
+```json
+{
+  "dni": "12345678",
+  "email": "admin@example.com",
+  "password": "securePassword123"
+}
+```
+
+**Response (200 OK - Autenticación exitosa):**
+```json
+{
+  "authenticated": true,
+  "dni": "12345678",
+  "nombre": "GARCIA LOPEZ CARLOS ALBERTO",
+  "email": "admin@example.com",
+  "message": "Admin authenticated successfully"
+}
+```
+
+**Response (401 Unauthorized - Credenciales inválidas):**
+```json
+{
+  "authenticated": false,
+  "dni": null,
+  "nombre": null,
+  "email": null,
+  "message": "Invalid credentials"
+}
+```
+
+**Validaciones:**
+- El DNI debe existir en la tabla Admin
+- El email debe coincidir exactamente con el registrado
+- La contraseña debe coincidir exactamente con la registrada
+
+**Nota de seguridad:** Este endpoint verifica las credenciales en texto plano. En un entorno de producción se recomienda implementar:
+- Hash de contraseñas (bcrypt, argon2)
+- Tokens JWT para sesiones
+- Rate limiting para prevenir ataques de fuerza bruta
 
 ---
 

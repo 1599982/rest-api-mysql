@@ -31,4 +31,7 @@ public class Candidate {
 
     @Column
     private Integer votes;
+
+    @Column(nullable = false)
+    private Boolean enabled = true;
 }

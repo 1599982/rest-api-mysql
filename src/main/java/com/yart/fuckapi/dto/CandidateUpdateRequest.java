@@ -9,4 +9,5 @@ public class CandidateUpdateRequest {
     private String description;
     private String imageUri;
     private Office roleType;
+    private Boolean enabled;
 }

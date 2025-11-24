@@ -14,5 +14,6 @@ public class CandidateResponse {
     private String imageUri;
     private Office roleType;
     private Integer votes;
+    private Boolean enabled;
     private String message;
 }
